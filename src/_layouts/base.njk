@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title or site.title }}</title>
+    <meta name="description" content="{{ site.description }}">
+    <link rel="stylesheet" href="/css/chota.min.css">
+    <style>
+      /* Custom single column layout with Arial fonts */
+      :root {
+        --grid-maxWidth: 80rem;
+        --font-family-sans: Arial, sans-serif;
+      }
+      
+      body {
+        font-family: Arial, sans-serif;
+        font-size: calc(1rem + 0.2rem);
+        padding: 0 1rem;
+      }
+      
+      h1, h2, h3, h4, h5, h6, .brand-title, .nav .tabs a, .button {
+        font-family: "Arial Black", Arial, sans-serif;
+        font-size: calc(1em + 0.2rem);
+      }
+      
+      .container {
+        max-width: 80rem;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      
+      .brand-title { 
+        font-weight: 900; 
+        letter-spacing: .3px;
+        font-size: calc(1.2rem + 0.2rem);
+      }
+      
+      .post-card { 
+        margin-bottom: 1.5rem; 
+      }
+      
+      .footer { 
+        margin-top: 4rem; 
+        padding: 2rem 0; 
+        border-top: 1px solid var(--color-lightGrey); 
+        font-size: calc(0.9rem + 0.2rem);
+      }
+      
+      .table-wrap { 
+        overflow-x:auto; 
+      }
+      
+      /* Single column layout - remove multi-column grid */
+      .row {
+        display: block;
+      }
+      
+      .col, .col-12 {
+        width: 100%;
+        max-width: 100%;
+      }
+      
+      /* Responsive navigation */
+      .nav {
+        flex-wrap: wrap;
+      }
+      
+      .nav .nav-left,
+      .nav .nav-right {
+        flex-wrap: wrap;
+      }
+      
+      /* Responsive breakpoints */
+      @media (max-width: 768px) {
+        body {
+          font-size: calc(0.95rem + 0.2rem);
+        }
+        
+        .container {
+          max-width: 100%;
+          padding: 0 0.75rem;
+        }
+        
+        .nav {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        
+        .nav .nav-left,
+        .nav .nav-right {
+          width: 100%;
+          justify-content: flex-start;
+          margin-bottom: 0.5rem;
+        }
+        
+        .nav .tabs {
+          flex-wrap: wrap;
+        }
+        
+        .nav .tabs a {
+          font-size: calc(0.9rem + 0.2rem);
+          padding: 0.4rem 0.6rem;
+        }
+        
+        h1 { font-size: calc(1.8rem + 0.2rem); }
+        h2 { font-size: calc(1.5rem + 0.2rem); }
+        h3 { font-size: calc(1.3rem + 0.2rem); }
+      }
+      
+      @media (max-width: 480px) {
+        body {
+          font-size: calc(0.9rem + 0.2rem);
+          padding: 0 0.5rem;
+        }
+        
+        .container {
+          padding: 0 0.5rem;
+        }
+        
+        .brand-title {
+          font-size: calc(1rem + 0.2rem);
+        }
+        
+        .button {
+          font-size: calc(0.85rem + 0.2rem);
+          padding: 0.4rem 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav container">
+      <div class="nav-left">
+        <a class="brand brand-title" href="/">Chota Notes</a>
+        <div class="tabs">
+          <a href="/" {% if page.url == "/" %}class="active"{% endif %}>Home</a>
+          <a href="/about/" {% if page.url == "/about/" %}class="active"{% endif %}>About</a>
+          <a href="/blog/" {% if page.url.startsWith("/blog/") %}class="active"{% endif %}>Blog</a>
+          <a href="/documentation/" {% if page.url == "/documentation/" %}class="active"{% endif %}>Docs</a>
+          <a href="/tables/" {% if page.url == "/tables/" %}class="active"{% endif %}>Tables</a>
+          <a href="/contact/" {% if page.url == "/contact/" %}class="active"{% endif %}>Contact</a>
+        </div>
+      </div>
+      <div class="nav-right">
+        <button id="themeToggle" class="button outline">🌙 Dark</button>
+      </div>
+    </nav>
+
+    <main class="container">
+      {{ content | safe }}
+    </main>
+
+    <footer class="footer container">
+      <div class="row">
+        <div class="col">
+          <p>&copy; {{ "now" | date("yyyy") }} {{ site.author }} — <a href="/">Chota Notes</a></p>
+          <p><a class="button clear" href="/documentation/">Documentation</a></p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Dark mode: prefer saved theme, fallback to OS preference -->
+    <script>
+      (function() {
+        const key = "theme";
+        const saved = localStorage.getItem(key);
+        if (saved === "dark" || (!saved && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.body.classList.add("dark");
+        }
+        const btn = document.getElementById("themeToggle");
+        function updateLabel() { btn.textContent = document.body.classList.contains("dark") ? "☀️ Light" : "🌙 Dark"; }
+        if (btn) {
+          updateLabel();
+          btn.addEventListener("click", () => {
+            document.body.classList.toggle("dark");
+            localStorage.setItem(key, document.body.classList.contains("dark") ? "dark" : "light");
+            updateLabel();
+          });
+        }
+      })();
+    </script>
+
+    <!-- Chota dark mode variables per docs -->
+    <style>
+      body.dark {
+        --bg-color: #000;
+        --bg-secondary-color: #131316;
+        --font-color: #f5f5f5;
+        --color-grey: #ccc;
+        --color-darkGrey: #777;
+      }
+    </style>
+  </body>
+</html>
