@@ -11,7 +11,7 @@ export default function(eleventyConfig) {
   eleventyConfig.addNunjucksFilter("date", function(dateObj, format = "yyyy-LL-dd") {
     return DateTime.fromJSDate(dateObj, { zone: "utc" }).toFormat(format);
   });
-
+  eleventyConfig.addShortcode("year", () => `${new Date().getFullYear()}`);
   // Collections
   eleventyConfig.addCollection("posts", (collection) => {
     return collection
