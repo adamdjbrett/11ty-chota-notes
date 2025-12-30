@@ -1,21 +1,37 @@
 import { DateTime } from "luxon";
 
 export default function(eleventyConfig) {
-  // Passthrough any static assets (images, etc.)
-  eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
-  
-  // Copy Chota CSS from node_modules to /css/
-  eleventyConfig.addPassthroughCopy({ "node_modules/chota/dist/chota.min.css": "css/chota.min.css" });
+  eleventyConfig.addPassthroughCopy({ "public": "/" });
+  eleventyConfig.addWatchTarget("public/css/chota.css");
 
-  // Add date filter for Nunjucks
-  eleventyConfig.addNunjucksFilter("date", function(dateObj, format = "yyyy-LL-dd") {
-    return DateTime.fromJSDate(dateObj, { zone: "utc" }).toFormat(format);
+  // Add date filter (engine-agnostic) with robust Luxon handling
+  eleventyConfig.addFilter("date", function(dateObj, format = "yyyy-LL-dd") {
+    if (!dateObj) return "";
+
+    let dt;
+    if (typeof dateObj === "string") {
+      dt = DateTime.fromISO(dateObj, { zone: "utc" });
+      if (!dt.isValid) dt = DateTime.fromJSDate(new Date(dateObj), { zone: "utc" });
+    } else if (dateObj instanceof Date) {
+      dt = DateTime.fromJSDate(dateObj, { zone: "utc" });
+    } else if (dateObj && typeof dateObj.toJSDate === "function") {
+      // Handle objects that expose toJSDate (defensive)
+      try {
+        dt = DateTime.fromJSDate(dateObj.toJSDate(), { zone: "utc" });
+      } catch (e) {
+        dt = DateTime.fromJSDate(new Date(dateObj), { zone: "utc" });
+      }
+    } else {
+      dt = DateTime.fromJSDate(new Date(dateObj), { zone: "utc" });
+    }
+
+    return dt.toFormat(format);
   });
   eleventyConfig.addShortcode("year", () => `${new Date().getFullYear()}`);
   // Collections
   eleventyConfig.addCollection("posts", (collection) => {
     return collection
-      .getFilteredByGlob("src/blog/**/*.md")
+      .getFilteredByGlob("content/blog/**/*.md")
       .filter(p => !p.data.draft)
       .sort((a, b) => (a.date > b.date ? -1 : 1));
   });
@@ -23,7 +39,7 @@ export default function(eleventyConfig) {
   // Return directory structure
   return {
     dir: {
-      input: "src",
+      input: "content",
       includes: "_includes",
       layouts: "_layouts"
     },

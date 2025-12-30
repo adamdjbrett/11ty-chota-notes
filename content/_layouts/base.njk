@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title or metadata.title }}</title>
+    <meta name="description" content="{{ metadata.description }}">
+    <link rel="stylesheet" href="/css/chota.css">
+    <style>
+      :root {
+        --grid-maxWidth: 70rem;
+        --font-family-sans: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        --font-family-heading: "Segoe UI Semibold", "Arial Black", Arial, sans-serif;
+        --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.08);
+        --bg-page: linear-gradient(135deg, #f7f9fb 0%, #eef3ff 45%, #f7f9fb 100%);
+        --bg-surface: #ffffff;
+        --text-color: #111827;
+        --muted-color: #4b5563;
+        --border-color: #e5e8ef;
+        --accent-color: #4f46e5;
+        --link-color: #0f172a;
+      }
+      
+      body {
+        font-family: var(--font-family-sans);
+        font-size: 1.05rem;
+        line-height: 1.7;
+        padding: 0 1.25rem 2rem;
+        background: var(--bg-page);
+        color: var(--text-color);
+      }
+      
+      h1, h2, h3, h4, h5, h6, .brand-title, .nav .tabs a, .button {
+        font-family: var(--font-family-heading);
+        letter-spacing: 0.2px;
+        color: var(--link-color);
+      }
+
+      h1 { font-size: 2.6rem; }
+      h2 { font-size: 2rem; }
+      h3 { font-size: 1.6rem; }
+      h4 { font-size: 1.3rem; }
+      
+      .container {
+        max-width: 80rem;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 1rem 2rem;
+      }
+
+      main.container {
+        background: var(--bg-surface);
+        border-radius: 18px;
+        box-shadow: var(--shadow-soft);
+        padding-top: 2rem;
+        padding-bottom: 2.5rem;
+        margin-top: 1.5rem;
+      }
+
+      .nav {
+        background: var(--bg-surface);
+        backdrop-filter: blur(6px);
+        margin-top: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        box-shadow: var(--shadow-soft);
+        flex-wrap: wrap;
+      }
+
+      .nav a {
+        color: var(--link-color);
+      }
+
+      .brand-title { 
+        font-weight: 900; 
+        letter-spacing: .4px;
+        font-size: 1.3rem;
+      }
+      
+      .post-card { 
+        margin-bottom: 1.5rem;
+        box-shadow: var(--shadow-soft);
+        border-radius: 14px;
+      }
+
+      .card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+      }
+      
+      .footer { 
+        margin-top: 3rem; 
+        padding: 2rem 0 1rem; 
+        border-top: 1px solid var(--border-color); 
+        font-size: 0.95rem;
+      }
+      
+      .table-wrap { 
+        overflow-x:auto; 
+      }
+
+      .row {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .row-full {
+        width: 100%;
+      }
+
+      .row > [class*="col"] {
+        width: 100%;
+      }
+
+      .button-columns {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.75rem;
+      }
+
+      .button-columns .button {
+        width: 100%;
+        text-align: center;
+      }
+
+      .stacked-form {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .stacked-form label {
+        display: grid;
+        gap: 0.4rem;
+      }
+
+      .stacked-form .label {
+        font-size: 0.95rem;
+        color: #4b5563;
+      }
+
+      .stacked-form input,
+      .stacked-form textarea {
+        width: 100%;
+      }
+
+      .stacked-form .form-actions {
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+        outline: 2px solid var(--accent-color);
+        outline-offset: 2px;
+      }
+      
+      @media (max-width: 768px) {
+        body {
+          font-size: 1rem;
+        }
+        
+        .container {
+          max-width: 100%;
+          padding: 0 0.75rem 1.5rem;
+        }
+        
+        .nav {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        
+        .nav .nav-left,
+        .nav .nav-right {
+          width: 100%;
+          justify-content: flex-start;
+          margin-bottom: 0.5rem;
+        }
+        
+        .nav .tabs {
+          flex-wrap: wrap;
+        }
+        
+        .nav .tabs a {
+          font-size: 1rem;
+          padding: 0.4rem 0.6rem;
+        }
+        
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.7rem; }
+        h3 { font-size: 1.4rem; }
+      }
+      
+      @media (max-width: 480px) {
+        body {
+          font-size: 0.98rem;
+          padding: 0 0.5rem;
+        }
+        
+        .container {
+          padding: 0 0.5rem 1.25rem;
+        }
+        
+        .brand-title {
+          font-size: 1.05rem;
+        }
+        
+        .button {
+          font-size: 0.95rem;
+          padding: 0.4rem 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav container">
+      <div class="nav-left">
+        <a class="brand brand-title" href="/">{{ metadata.title }}</a>
+        <div class="tabs">
+          <a href="/" {% if page.url == "/" %}class="active"{% endif %}>Home</a>
+          <a href="/about/" {% if page.url == "/about/" %}class="active"{% endif %}>About</a>
+          <a href="/blog/" {% if page.url.startsWith("/blog/") %}class="active"{% endif %}>Blog</a>
+          <a href="/documentation/" {% if page.url == "/documentation/" %}class="active"{% endif %}>Docs</a>
+          <a href="/tables/" {% if page.url == "/tables/" %}class="active"{% endif %}>Tables</a>
+          <a href="/contact/" {% if page.url == "/contact/" %}class="active"{% endif %}>Contact</a>
+        </div>
+      </div>
+      <div class="nav-right">
+        <button id="themeToggle" class="button outline">🌙 Dark</button>
+      </div>
+    </nav>
+
+    <main class="container">
+      {{ content | safe }}
+    </main>
+
+    <footer class="footer container">
+      <div class="row">
+        <div class="col">
+          <p>&copy; {% year %} {{ metadata.author }} — <a href="/">{{ metadata.title }}</a> Built {{ build.builtAt | date("yyyy-LL-dd") }} with <a href="https://www.11ty.dev">Eleventy {{ build.eleventyVersion }}</a>.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Dark mode: prefer saved theme, fallback to OS preference -->
+    <script>
+      (function() {
+        const key = "theme";
+        const saved = localStorage.getItem(key);
+        if (saved === "dark" || (!saved && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.body.classList.add("dark");
+        }
+        const btn = document.getElementById("themeToggle");
+        function updateLabel() { btn.textContent = document.body.classList.contains("dark") ? "☀️ Light" : "🌙 Dark"; }
+        if (btn) {
+          updateLabel();
+          btn.addEventListener("click", () => {
+            document.body.classList.toggle("dark");
+            localStorage.setItem(key, document.body.classList.contains("dark") ? "dark" : "light");
+            updateLabel();
+          });
+        }
+      })();
+    </script>
+
+    <!-- Chota dark mode variables per docs -->
+    <style>
+      body.dark {
+        --bg-page: linear-gradient(135deg, #0f172a 0%, #0b1222 60%, #0f172a 100%);
+        --bg-surface: #0b1222;
+        --text-color: #e5e7eb;
+        --muted-color: #9ca3af;
+        --border-color: #1f2937;
+        --shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.45);
+        --link-color: #e5e7eb;
+      }
+
+      body.dark .nav {
+        box-shadow: none;
+      }
+
+      body.dark .card, 
+      body.dark main.container {
+        color: var(--text-color);
+      }
+    </style>
+  </body>
+</html>
